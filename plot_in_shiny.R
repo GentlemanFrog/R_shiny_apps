@@ -30,11 +30,35 @@ data("airquality")
                           # default val:
                           value = 30)
               
+            ),
+            
+            #Adding main panel to displaying the plot:
+            mainPanel(
+              
+              #Output: histogram: name of plot should be the same as in server
+              plotOutput(outputId = 'distPlot')
             )
             
           ) # End_of_sidebar_layout
         
         ), # End_of_tab_panel
+      tabPanel("Temperature",
+               sidebarLayout(
+                 sidebarPanel(
+                   sliderInput(inputId = "bins_temp",
+                    label = "Number of bins to display on histogram",
+                    min = 1,
+                    max = 90,
+                    value = 45
+                  )
+                  
+                 ),
+                 mainPanel(plotOutput(outputId = "distPlot_temp")
+                 )
+                 
+                )
+               
+               ),
       
       ) #End_of_navbar_Page
     
@@ -54,9 +78,25 @@ data("airquality")
       bins <- seq(min(x), max(x), length.out = input$bins + 1)
       
       # Properties of histogram:
-      hist(x, breaks = bins, col = "#75AADB", border = "White",
+      hist(x, breaks = bins, col = "#75AADB", border = "black",
            xlab = "Ozone levels",
            main = "Histogram of ozone level")
+      
+    })
+    output$distPlot_temp <- renderPlot({
+      
+      # Setting the properties of the plot from data:
+      x <- airquality$Temp
+      
+      # Removing the rows with missing values
+      x <- na.omit(x) 
+      
+      bins_temp <- seq(min(x), max(x), length.out = input$bins_temp + 1)
+      
+      # Properties of histogram:
+      hist(x, breaks = bins_temp, col = "#75AADB", border = "black",
+           xlab = "Temperature levels",
+           main = "Histogram of temperature level")
       
     })
   } # server
