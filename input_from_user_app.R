@@ -19,16 +19,19 @@ ui <- fluidPage(theme = shinytheme("cyborg"),
                              textInput('txt_surname', "Write your surname: ", ""),
                              
                            ),
+                           
                            mainPanel(
                              h2("This app will write output you provide in the entry places."),
                              
                              h3("So hopefully your name is....: "),
                              verbatimTextOutput("txtout")
                            )# End_of_main_Panel
+                           
                           ), # End_of_tab_panel
                   # Setting up another panels to use:
                   tabPanel("Navbar2", "Intensionaly left blank to check how it works"),
-                  tabPanel("Navbar3", "Same here...")
+                  tabPanel("Navbar3", "Same here..."),
+                  
                 ) #End_of_navbar_Page
               ) #End_of_fluid_Page
 
