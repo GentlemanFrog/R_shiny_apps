@@ -25,7 +25,7 @@ ui <- fluidPage(theme = shinytheme("cyborg"),
                              h3("So hopefully your name is....: "),
                              verbatimTextOutput("txtout")
                            )# End_of_main_Panel
-                           ), # End_of_tab_panel
+                          ), # End_of_tab_panel
                   # Setting up another panels to use:
                   tabPanel("Navbar2", "Intensionaly left blank to check how it works"),
                   tabPanel("Navbar3", "Same here...")
