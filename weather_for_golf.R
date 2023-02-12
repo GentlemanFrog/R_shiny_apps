@@ -18,6 +18,7 @@ deciding_model <- randomForest(play ~., data = weather, ntree = 500, mtry = 4, i
 # Firstly function want formula which is a data frame or a matrix
 # predictors, or formula describing the model to be fitted. In this example
 # i wan to use all columns except the play column from data set to predict.
+# In this project the play varaible is the one that we want to predict. 
 
 # Second argument specifies the data set we are using. 
 # ntree - refers to the numbers of tree to grow, this number
@@ -38,7 +39,108 @@ deciding_model <- randomForest(play ~., data = weather, ntree = 500, mtry = 4, i
 # deciding_model <- readRDS("rf_model.rds")
 
 # Creating the ui:
+  ui <- fluidPage(
+    # Setting the theme
+    theme = shinytheme("cyborg"),
+    
+    #Page header:
+    headerPanel("Should I play golf?"),
+    
+    #Setting panel for inputing values:
+    sidebarPanel(
+      
+      #Settinh tittle:
+      HTML("<h3> Input parameters<h3>"),
+      
+      selectInput("outlook", label = "The weather condition outside: ",
+                  choices = list("sunny" = "sunny", "overcast" = "overcast", "rainy" = "rainy"),
+                  selected = "rainy"),
+      
+      #Temp slider:
+      sliderInput("temperature", label = "Temperature: ",
+                  min = 64, max = 85, value = 72),
+      
+      #Humidity slider:
+      sliderInput("humidity", label = "Humidity: ",
+                  min = 65, max = 96, value = 82),
+      
+      #Windy list:
+      selectInput("windy", label = "Is it windy?: ",
+                  choices = list("Yes" = "TRUE", "No" = "FALSE"),
+                  selected = "Yes"),
+      
+      #Submision button:                            defining how button looks
+      actionButton("submitbutton", label = "Check", class = "btn btn-primaty"),
+    ),
+    
+    mainPanel(
+      
+      tags$label(h3('Status/Output of the program')),
+      # Product of the server job, output of the prediction:
+      verbatimTextOutput("contents"),
+      tableOutput("tabeldata") #Prediction results tab
+    )
+    
+    
+  ) 
 
-
-
+    
+  # Defining server function to run the app:
+  server <- function(input, output, session){
+    
+    #Inputing the data:
+    datasetInput <- reactive({
+      
+      #Creating data frame from input values:
+      # outlook, temperature, humidity, windy, play:
+      df <- data.frame(
+        Name= c("outlook",
+                "temperature",
+                "Humidity",
+                "Windy"),
+        
+        value = as.character(c(input$outlook,
+                               input$temperature,
+                               input$humidity,
+                               input$windy)),
+        
+        stringsAsFactors = FALSE)
+      
+      #
+      play <- "play"
+      df <- rbind(df, play)
+      input <- transpose(df)
+      
+      write.table(input, "input.csv", sep=',', quote = FALSE, row.names = FALSE, col.names = FALSE)
+      
+      test <- read.csv(paste("input", ".csv", sep=""), header = TRUE)
+      
+      test$outlook <- factor(test$outlook, levels=c("overcast", "rainy", "sunny"))
+      
+      Output<- data.frame(Prediction = predict(deciding_model, test),
+                          round(predict(deciding_model, test, type="prob"), 3))
+      print(Output)
+    })
+    
+    # Status/Output text box:
+    output$contents <- renderPrint({
+      if (input$submitbutton > 0){
+        isolate("Calculation complete.")
+      }else{
+        return("Server is ready for calculation")
+      }
+    })
+    
+    # Outputing the prediction:
+    output$tabledata <- renderTable({
+      if (input$submitbutton > 0){
+        isolate(datasetInput())
+      }
+    })
+    
+   } # server
+ 
+ 
+  # Creating the shiny object:
+  shinyApp(ui = ui, server = server)
 
