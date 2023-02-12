@@ -12,7 +12,7 @@ weather
 # Preparing the model to check if we should play the golf according to the user input:
 # used decisive model will be random Forest
 
-deciding_model <- randomForest(play ~., data = weather, ntree = 500, mtry = 4, importance = TRUE)
+deciding_model <- randomForest(as.factor(play) ~ ., data = weather, ntree = 500, mtry = 4, importance = TRUE)
 # This function implements Brelman's random forest algorithm for classification 
 # and regression. 
 # Firstly function want formula which is a data frame or a matrix
@@ -41,7 +41,7 @@ deciding_model <- randomForest(play ~., data = weather, ntree = 500, mtry = 4, i
 # Creating the ui:
   ui <- fluidPage(
     # Setting the theme
-    theme = shinytheme("cyborg"),
+    theme = shinytheme("cerulean"),
     
     #Page header:
     headerPanel("Should I play golf?"),
@@ -78,7 +78,7 @@ deciding_model <- randomForest(play ~., data = weather, ntree = 500, mtry = 4, i
       tags$label(h3('Status/Output of the program')),
       # Product of the server job, output of the prediction:
       verbatimTextOutput("contents"),
-      tableOutput("tabeldata") #Prediction results tab
+      tableOutput("tabledata") #Prediction results tab
     )
     
     
@@ -96,8 +96,8 @@ deciding_model <- randomForest(play ~., data = weather, ntree = 500, mtry = 4, i
       df <- data.frame(
         Name= c("outlook",
                 "temperature",
-                "Humidity",
-                "Windy"),
+                "humidity",
+                "windy"),
         
         value = as.character(c(input$outlook,
                                input$temperature,
@@ -111,9 +111,9 @@ deciding_model <- randomForest(play ~., data = weather, ntree = 500, mtry = 4, i
       df <- rbind(df, play)
       input <- transpose(df)
       
-      write.table(input, "input.csv", sep=',', quote = FALSE, row.names = FALSE, col.names = FALSE)
+      write.table(input, "input_weather.csv", sep=',', quote = FALSE, row.names = FALSE, col.names = FALSE)
       
-      test <- read.csv(paste("input", ".csv", sep=""), header = TRUE)
+      test <- read.csv(paste("input_weather", ".csv", sep=""), header = TRUE)
       
       test$outlook <- factor(test$outlook, levels=c("overcast", "rainy", "sunny"))
       
