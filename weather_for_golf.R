@@ -7,12 +7,15 @@ library(randomForest)
 
 # Read data
 weather <- read.csv(text = getURL("https://raw.githubusercontent.com/dataprofessor/data/master/weather-weka.csv") )
-weather
+
+# We have to change this two varaibles to factors to use the model
+weather$play = factor(weather$play)
+weather$outlook =factor(weather$outlook)
 
 # Preparing the model to check if we should play the golf according to the user input:
 # used decisive model will be random Forest
 
-deciding_model <- randomForest(as.factor(play) ~ ., data = weather, ntree = 500, mtry = 4, importance = TRUE)
+deciding_model <- randomForest(play ~ ., data = weather, ntree = 500, mtry = 4, importance = TRUE)
 # This function implements Brelman's random forest algorithm for classification 
 # and regression. 
 # Firstly function want formula which is a data frame or a matrix
@@ -41,7 +44,7 @@ deciding_model <- randomForest(as.factor(play) ~ ., data = weather, ntree = 500,
 # Creating the ui:
   ui <- fluidPage(
     # Setting the theme
-    theme = shinytheme("cerulean"),
+    theme = shinytheme("cyborg"),
     
     #Page header:
     headerPanel("Should I play golf?"),
