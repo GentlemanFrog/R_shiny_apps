@@ -21,7 +21,7 @@ deciding_model <- randomForest(play ~ ., data = weather, ntree = 500, mtry = 4, 
 # Firstly function want formula which is a data frame or a matrix
 # predictors, or formula describing the model to be fitted. In this example
 # i wan to use all columns except the play column from data set to predict.
-# In this project the play varaible is the one that we want to predict. 
+# In this project the play variable is the one that we want to predict. 
 
 # Second argument specifies the data set we are using. 
 # ntree - refers to the numbers of tree to grow, this number
