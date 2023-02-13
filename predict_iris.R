@@ -50,7 +50,7 @@ saveRDS(model, "iris_random_forest_model.rds")
     sidebarPanel(
       
       #Setting tittle:
-      HTML("<h4>Select your iris parameter on sliders<h4>"),
+      HTML("<h5>Select your iris parameter on sliders: <h5>"),
       
       #Sepal length slider:
       sliderInput("Sepal.Length", label = "Sepal length: ",
