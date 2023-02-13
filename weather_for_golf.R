@@ -49,10 +49,10 @@ deciding_model <- randomForest(play ~ ., data = weather, ntree = 500, mtry = 4, 
     #Page header:
     headerPanel("Should I play golf?"),
     
-    #Setting panel for inputing values:
+    #Setting panel for inputting values:
     sidebarPanel(
       
-      #Settinh tittle:
+      #Setting tittle:
       HTML("<h3> Input parameters<h3>"),
       
       selectInput("outlook", label = "The weather condition outside: ",
